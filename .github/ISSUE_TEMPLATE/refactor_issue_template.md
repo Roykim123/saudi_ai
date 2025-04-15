@@ -1,7 +1,7 @@
-
 ---
 name: "🛠 Refactor"
 about: "코드 리팩토링"
+title: "[Refactor] "
 labels: ["refactor"]
 assignees: []
 ---
