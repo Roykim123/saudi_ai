@@ -18,10 +18,16 @@ public class UserService {
     public User saveUser(String oauthId, String email) {
         User existingUser = userRepository.findByOauthId(oauthId);
         if (existingUser != null) {
-            return existingUser; // 이미 존재하는 경우 기존 사용자 리턴
+            // 이메일이 변경된 경우 갱신
+            if (!existingUser.getEmail().equals(email)) {
+                existingUser.setEmail(email);
+                return userRepository.save(existingUser); // 이메일 갱신 후 저장
+            }
+            return existingUser; // 이메일이 동일하면 그대로 리턴
         }
 
+        // 새로운 사용자 저장
         User user = new User(oauthId, email);
-        return userRepository.save(user); // 새로운 사용자 저장
+        return userRepository.save(user);
     }
 }

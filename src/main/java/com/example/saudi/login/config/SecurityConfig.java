@@ -54,6 +54,7 @@ public class SecurityConfig {
             // 사용자 정보 db에 저장
             userService.saveUser(id, email);
 
+            /* 테스트
             String body = """
                     {"id":"%s",
                      "email": "%s"
@@ -66,9 +67,10 @@ public class SecurityConfig {
             PrintWriter writer = response.getWriter();
             writer.println(body);
             writer.flush();
+            */
 
             // 로그인 성공시 메인페이지 이동
-            //response.sendRedirect("/login/main");
+            response.sendRedirect("/main");
         });
     }
 }
