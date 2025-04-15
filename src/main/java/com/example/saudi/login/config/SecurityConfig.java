@@ -1,5 +1,6 @@
 package com.example.saudi.login.config;
 import com.example.saudi.login.service.OAuth2UserService;
+import com.example.saudi.user.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -16,8 +17,10 @@ import java.util.Map;
 @EnableMethodSecurity
 public class SecurityConfig {
     private final OAuth2UserService oAuth2UserService;
-    public SecurityConfig(OAuth2UserService oAuth2UserService) {
+    private final UserService userService;
+    public SecurityConfig(OAuth2UserService oAuth2UserService, UserService userService) {
         this.oAuth2UserService = oAuth2UserService;
+        this.userService = userService;
     }
 
     @Bean
@@ -48,6 +51,8 @@ public class SecurityConfig {
             Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
             String email = kakaoAccount != null ? (String) kakaoAccount.get("email") : null;
 
+            // 사용자 정보 db에 저장
+            userService.saveUser(id, email);
 
             String body = """
                     {"id":"%s",
@@ -62,7 +67,6 @@ public class SecurityConfig {
             writer.println(body);
             writer.flush();
 
-            //db 저장
             // 로그인 성공시 메인페이지 이동
             //response.sendRedirect("/login/main");
         });
