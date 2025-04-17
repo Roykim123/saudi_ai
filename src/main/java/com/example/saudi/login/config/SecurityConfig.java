@@ -1,6 +1,7 @@
 package com.example.saudi.login.config;
 import com.example.saudi.login.service.OAuth2UserService;
 import com.example.saudi.user.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -25,17 +26,23 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf((csrf) ->
-                        csrf.disable()
-                );
+        http.csrf((csrf) -> csrf.disable());
         http.authorizeHttpRequests(config -> config.anyRequest().permitAll());
         http.oauth2Login(oauth2Configurer -> oauth2Configurer
                 .loginPage("/login")
                 .successHandler(successHandler())
                 .userInfoEndpoint(userInfo -> userInfo
                         .userService(oAuth2UserService)));
+
+        http.logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID"));
+
         return http.build();
+
+
     }
 
     // 성공 시 받아올 값을 지정하는 핸들러 - 이메일 필요하면 추가
@@ -51,8 +58,14 @@ public class SecurityConfig {
             Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
             String email = kakaoAccount != null ? (String) kakaoAccount.get("email") : null;
 
+            // 카카오 프로필 추출
+            Map<String, Object> profile = (Map<String, Object>) attributes.get("properties");
+            String nickname = profile != null ? (String) profile.get("nickname") : null;
+            String profileImage = profile != null ? (String) profile.get("profile_image") : null;
+
+
             // 사용자 정보 db에 저장
-            userService.saveUser(id, email);
+            userService.saveUser(id, email, nickname, profileImage);
 
             /* 테스트
             String body = """
@@ -69,8 +82,14 @@ public class SecurityConfig {
             writer.flush();
             */
 
+            // 세션에 사용자 정보 저장
+            HttpSession session = request.getSession();
+            session.setAttribute("userId", id);
+            session.setAttribute("userEmail", email);
+
             // 로그인 성공시 메인페이지 이동
             response.sendRedirect("/main");
+
         });
     }
 }

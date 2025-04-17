@@ -15,19 +15,29 @@ public class UserService {
     }
 
     @Transactional
-    public User saveUser(String oauthId, String email) {
+    public User saveUser(String oauthId, String email, String nickname, String profileImage) {
         User existingUser = userRepository.findByOauthId(oauthId);
         if (existingUser != null) {
-            // 이메일이 변경된 경우 갱신
+            // 이메일 변경 여부 체크
             if (!existingUser.getEmail().equals(email)) {
                 existingUser.setEmail(email);
-                return userRepository.save(existingUser); // 이메일 갱신 후 저장
             }
-            return existingUser; // 이메일이 동일하면 그대로 리턴
+
+            // 닉네임 변경 여부 체크 (null 체크 추가)
+            if (existingUser.getNickname() == null || !existingUser.getNickname().equals(nickname)) {
+                existingUser.setNickname(nickname);
+            }
+
+            // 프로필 이미지 변경 여부 체크 (null 체크 추가)
+            if (existingUser.getProfileImage() == null || !existingUser.getProfileImage().equals(profileImage)) {
+                existingUser.setProfileImage(profileImage);
+            }
+
+            return userRepository.save(existingUser); // 갱신 후 저장
         }
 
         // 새로운 사용자 저장
-        User user = new User(oauthId, email);
+        User user = new User(oauthId, email, nickname, profileImage);
         return userRepository.save(user);
     }
 }

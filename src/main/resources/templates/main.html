@@ -1,12 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Success</title>
+    <title>Login 성공</title>
 </head>
 <body>
-<h1>Login Successful!</h1>
-<p>로그인 성공</p>
+<h1>Login 성공!</h1>
+
+
+
+<h1>세션 정보</h1>
+<div>
+    <p><strong>User ID:</strong> <span th:text="${userId}"></span></p>
+    <p><strong>User Email:</strong> <span th:text="${userEmail}"></span></p>
+</div>
 </body>
 </html>
+
+
+<!-- 로그아웃 버튼 -->
+<form action="/logout" method="post">
+    <button type="submit">Logout</button>
+</form>

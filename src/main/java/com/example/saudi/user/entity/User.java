@@ -13,14 +13,35 @@ public class User {
     private Long id;
     private String oauthId;
     private String email;
+    private String nickname;
+    private String profileImage;
+
 
     // 기본 생성자
     public User() {}
 
     // 생성자
-    public User(String oauthId, String email) {
+    public User(String oauthId, String email, String nickname, String profileImage) {
         this.oauthId = oauthId;
         this.email = email;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 
     // Getters and Setters
