@@ -35,7 +35,7 @@ public class SecurityConfig {
         http.csrf((csrf) -> csrf.disable());
 
         http.authorizeHttpRequests(config -> config
-                .requestMatchers("/main", "/board/**", "/mypage/**").authenticated()
+                .requestMatchers("/main", "/posts/**", "/mypage/**").authenticated()
                 .anyRequest().permitAll());
 
         http.oauth2Login(oauth2Configurer -> oauth2Configurer
