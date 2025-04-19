@@ -13,7 +13,7 @@ public class JwtUtil {
     private final Key key;
     private final long expireTime = 1000 * 60 * 60 * 24; // 토큰 유효시간 (1일)
 
-    // yml파일에서 갑자기 안 불러와져서 빈이 안 만들어짐-> 추후 수정.. 임시로 하드코딩한 키 사용
+    // 생성자에서 하드코딩한 키 사용
     public JwtUtil() {
         // 키를 32바이트로 길게 수정
         String secret = "qFvE7k9******T1vXUykVzRShVg======"; // 32바이트 이상
