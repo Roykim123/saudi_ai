@@ -2,6 +2,7 @@ package com.example.saudi.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -45,4 +46,14 @@ public class JwtUtil {
             return false;
         }
     }
+
+    // Authorization 헤더에서 Bearer로 시작하는 토큰 추출
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7); // "Bearer " 다음부터 자름
+        }
+        return null;
+    }
+
 }
