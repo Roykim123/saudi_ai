@@ -186,3 +186,7 @@ gradle-app.setting
 !gradle-wrapper.properties
 .gradletasknamecache
 *.hprof
+
+### application.yml ###
+application.yml
+src/main/resources/application.yml
