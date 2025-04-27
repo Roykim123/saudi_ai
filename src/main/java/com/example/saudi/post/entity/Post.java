@@ -2,7 +2,7 @@ package com.example.saudi.post.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+import lombok.Builder;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

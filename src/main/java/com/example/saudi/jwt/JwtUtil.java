@@ -3,7 +3,6 @@ package com.example.saudi.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -14,8 +13,10 @@ public class JwtUtil {
     private final Key key;
     private final long expireTime = 1000 * 60 * 60 * 24; // 토큰 유효시간 (1일)
 
-    // 생성자에서 yml/properties에서 키 받아오기
-    public JwtUtil(@Value("${jwt.secret}") String secret) {
+    // 생성자에서 하드코딩한 키 사용
+    public JwtUtil() {
+        // 키를 32바이트로 길게 수정
+        String secret = "qFvE7k9******T1vXUykVzRShVg======"; // 32바이트 이상
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
@@ -47,13 +48,13 @@ public class JwtUtil {
         }
     }
 
-    // Authorization 헤더에서 Bearer로 시작하는 토큰 추출
+    // Authorization 헤더에서 토큰을 추출
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7); // "Bearer " 다음부터 자름
+            return bearerToken.substring(7); // "Bearer " 이후의 토큰 부분 반환
         }
-        return null;
+        return null; // 토큰이 없으면 null 반환
     }
 
 }
