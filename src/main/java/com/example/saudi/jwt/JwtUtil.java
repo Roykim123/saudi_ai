@@ -3,6 +3,7 @@ package com.example.saudi.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -11,12 +12,10 @@ import java.util.Date;
 @Component
 public class JwtUtil {
     private final Key key;
-    private final long expireTime = 1000 * 60 * 60 * 24; // 토큰 유효시간 (1일)
+    private final long expireTime = 1000 * 60 * 60 * 24;
 
-    // 생성자에서 하드코딩한 키 사용
-    public JwtUtil() {
-        // 키를 32바이트로 길게 수정
-        String secret = "qFvE7k9******T1vXUykVzRShVg======"; // 32바이트 이상
+    // 생성자에 @Value 붙여서 주입 받기
+    public JwtUtil(@Value("${jwt.secret}") String secret) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
