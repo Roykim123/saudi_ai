@@ -54,6 +54,8 @@ local.properties
 *_REMOTE_*.txt
 
 ### Intellij ###
+.idea/
+.idea/dataSources.xml
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
